@@ -1,0 +1,48 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Wedge
+
+def create_gauge(score, title=''):
+    # Define the gauge limits
+    start_angle = 180
+    end_angle = 0
+
+    # Define the color segments for the gauge
+    colors = ['#e74c3c', '#f39c12', '#95a5a6']
+    labels = ['Low', 'Medium', 'High']
+
+    # Create figure and axis
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    # Define the radius
+    radius = 1
+
+    # Plot each color segment
+    start = start_angle
+    for i, color in enumerate(colors):
+        end = start - (180 / len(colors))
+        wedge = Wedge((0, 0), radius, end, start, color=color, edgecolor='white')
+        ax.add_patch(wedge)
+        start = end
+
+    # Plot the score as a white wedge
+    score_angle = start_angle - (score / 100 * 180)
+    score_wedge = Wedge((0, 0), radius, end_angle, score_angle, color='white', edgecolor='black')
+    ax.add_patch(score_wedge)
+
+    # Add the score in the center
+    ax.text(0, 0, str(score), ha='center', va='center', fontsize=30, fontweight='bold')
+
+    # Add the title if any
+    if title:
+        plt.title(title, fontsize=18, fontweight='bold', pad=20)
+
+    # Set equal scaling and remove the axis
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    # Display the plot
+    plt.show()
+
+# Example usage
+create_gauge(481, 'Student Score')
